@@ -19,6 +19,10 @@ Route::get('/add-to-cart/{id}', [
     'uses' => 'ProductController@getAddToCart',
     'as' => 'product.addToCart'
 ]);
+Route::get('/shopping-cart/', [
+    'uses' => 'ProductController@getCart',
+    'as' => 'product.shoppingCart'
+]);
 Route::get('/signup', [
     'uses' => 'UserController@getSignup',
     'as' => 'user.signup'
