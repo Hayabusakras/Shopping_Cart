@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Session;
+
 
 class UserController extends Controller
 {
@@ -24,6 +26,11 @@ class UserController extends Controller
         ]);
         $user->save();
         Auth::login($user);
+        if(Session::has('oldUrl')) {
+            $oldUrl = Session::get('oldUrl');
+            Session::forget('oldUrl');
+            return redirect()->to($oldUrl);
+        }
         return redirect()->route('user.profile');
     }
     public function getSingin()
@@ -37,6 +44,11 @@ class UserController extends Controller
             'password' => 'required'
         ]);
         if(Auth::attempt(['email'=>$request->email, 'password'=>$request->password])) {
+            if(Session::has('oldUrl')) {
+                $oldUrl = Session::get('oldUrl');
+                Session::forget('oldUrl');
+                return redirect()->to($oldUrl);
+            }
             return redirect()->route('user.profile');
         }
         return redirect()->back();
@@ -49,7 +61,7 @@ class UserController extends Controller
     public function getLogout()
     {
         Auth::logout();
-        return redirect()->back();
+        return redirect()->route('user.signin');
     }
 
 }

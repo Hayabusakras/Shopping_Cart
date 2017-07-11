@@ -25,6 +25,7 @@
                 </div>
                 <button type="submit">Sign In</button>
             </form>
+            <p>Dont have an account? <a href="{{'user.signup'}}">Sing up instead!</a></p>
         </div>
     </div>
 @endsection
