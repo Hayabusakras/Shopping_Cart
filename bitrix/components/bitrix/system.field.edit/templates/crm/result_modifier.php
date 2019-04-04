@@ -219,7 +219,7 @@ if (in_array('CONTACT', $arParams['ENTITY_TYPE'], true))
 				array('@ID' => $IDs, 'CHECK_PERMISSIONS' => 'N'),
 				false,
 				false,
-				array('ID', 'HONORIFIC', 'NAME', 'SECOND_NAME', 'LAST_NAME', 'FULL_NAME', 'COMPANY_TITLE', 'PHOTO')
+				array('ID', 'HONORIFIC', 'NAME', 'SECOND_NAME', 'LAST_NAME', 'FULL_NAME', 'COMPANY_TITLE', 'PHOTO', 'TYPE_ID')
 			);
 		}
 	}
@@ -231,8 +231,8 @@ if (in_array('CONTACT', $arParams['ENTITY_TYPE'], true))
 			false,
 			array('nTopCount' => 50),
 			$hasNameFormatter
-				? array('ID', 'HONORIFIC', 'NAME', 'SECOND_NAME', 'LAST_NAME', 'COMPANY_TITLE', 'PHOTO')
-				: array('ID', 'FULL_NAME', 'COMPANY_TITLE', 'PHOTO')
+				? array('ID', 'HONORIFIC', 'NAME', 'SECOND_NAME', 'LAST_NAME', 'COMPANY_TITLE', 'PHOTO', 'TYPE_ID')
+				: array('ID', 'FULL_NAME', 'COMPANY_TITLE', 'PHOTO', 'TYPE_ID')
 		);
 	}
 	while ($arRes = $obRes->Fetch())
@@ -281,8 +281,9 @@ if (in_array('CONTACT', $arParams['ENTITY_TYPE'], true))
 		{
 			$title = isset($arRes['FULL_NAME']) ? $arRes['FULL_NAME'] : '';
 		}
-
-		$arResult['ELEMENT'][] = Array(
+		if($arParams['arUserField']['~FIELD_NAME'] == "UF_CRM_5C658F9F6900D") {
+			if($arRes['TYPE_ID'] == 11) {
+$arResult['ELEMENT'][] = Array(
 			'title' => $title,
 			'desc'  => empty($arRes['COMPANY_TITLE']) ? '' : $arRes['COMPANY_TITLE'],
 			'id' => $arRes['SID'],
@@ -295,7 +296,79 @@ if (in_array('CONTACT', $arParams['ENTITY_TYPE'], true))
 			'type'  => 'contact',
 			'selected' => $sSelected
 		);
+			}else {
+
+				/*$arResult['ELEMENT'][] = Array(
+			'title' => $title,
+			'desc'  => empty($arRes['COMPANY_TITLE']) ? '' : $arRes['COMPANY_TITLE'],
+			'id' => $arRes['SID'],
+			'url' => CComponentEngine::MakePathFromTemplate(COption::GetOptionString('crm', 'path_to_contact_show'),
+				array(
+					'contact_id' => $arRes['ID']
+				)
+			),
+			'image' => $imageUrl,
+			'type'  => 'contact',
+			'selected' => $sSelected
+);*/
+}
+
+
+
+
+
+
+
+
+		}else if($arParams['arUserField']['~FIELD_NAME'] == "UF_CRM_5C522A0C1A826") {
+			if($arRes['TYPE_ID'] == 1 || $arRes['TYPE_ID'] == 2) {
+$arResult['ELEMENT'][] = Array(
+			'title' => $title,
+			'desc'  => empty($arRes['COMPANY_TITLE']) ? '' : $arRes['COMPANY_TITLE'],
+			'id' => $arRes['SID'],
+			'url' => CComponentEngine::MakePathFromTemplate(COption::GetOptionString('crm', 'path_to_contact_show'),
+				array(
+					'contact_id' => $arRes['ID']
+				)
+			),
+			'image' => $imageUrl,
+			'type'  => 'contact',
+			'selected' => $sSelected
+		);
+}
+
+}
+else {
+			$arResult['ELEMENT'][] = Array(
+			'title' => $title,
+			'desc'  => empty($arRes['COMPANY_TITLE']) ? '' : $arRes['COMPANY_TITLE'],
+			'id' => $arRes['SID'],
+			'url' => CComponentEngine::MakePathFromTemplate(COption::GetOptionString('crm', 'path_to_contact_show'),
+				array(
+					'contact_id' => $arRes['ID']
+				)
+			),
+			'image' => $imageUrl,
+			'type'  => 'contact',
+			'selected' => $sSelected
+);
+}
+		/*$arResult['ELEMENT'][] = Array(
+			'title' => $title,
+			'desc'  => empty($arRes['COMPANY_TITLE']) ? '' : $arRes['COMPANY_TITLE'],
+			'id' => $arRes['SID'],
+			'url' => CComponentEngine::MakePathFromTemplate(COption::GetOptionString('crm', 'path_to_contact_show'),
+				array(
+					'contact_id' => $arRes['ID']
+				)
+			),
+			'image' => $imageUrl,
+			'type'  => 'contact',
+			'selected' => $sSelected
+		);*/
+
 	}
+
 }
 if (in_array('COMPANY', $arParams['ENTITY_TYPE'], true))
 {
@@ -1050,6 +1123,7 @@ if (!empty($arResult['SELECTED']))
 		}
 		unset($arProducts);
 		$arResult['ELEMENT'] = array_merge($ar, $arResult['ELEMENT']);
+
 	}
 }
 
